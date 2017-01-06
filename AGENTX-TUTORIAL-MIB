@@ -1,0 +1,64 @@
+AGENTX-TUTORIAL-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    OBJECT-GROUP
+        FROM SNMPv2-CONF
+    DisplayString
+        FROM SNMPv2-TC
+    experimental, OBJECT-TYPE, Integer32, MODULE-IDENTITY
+        FROM SNMPv2-SMI
+;
+
+--
+-- top level structure
+--
+agentxTutorial MODULE-IDENTITY
+    LAST-UPDATED "201701050000Z"
+    ORGANIZATION "theunixtips"
+    CONTACT-INFO
+         "Vishal Jain
+	  kunwarv my last name at gmail
+	  firstname.lastname at theunixtips"
+    DESCRIPTION
+         "Example MIB to show how to make use of net-snmp
+	  agentx library step-by-step"
+    REVISION     "201701050000Z"
+    DESCRIPTION  "First step with Read-Only Scalars"
+    ::= { experimental 9999 }
+
+myScalars           OBJECT IDENTIFIER ::= { agentxTutorial  1 }
+myConformenceGroups OBJECT IDENTIFIER ::= { agentxTutorial 99 }
+
+---
+--- Some Scalars
+---
+myROString OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "A string value for tutorial"
+    ::= { myScalars 1 }
+
+myROInteger OBJECT-TYPE
+    SYNTAX      Integer32 (0..2147483647)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "An integer value for tutorial"
+    ::= { myScalars 2 }
+
+---
+--- Conformance related definitions
+---
+
+myScalarGroup OBJECT-GROUP
+    OBJECTS { myROString, myROInteger }
+    STATUS      current
+    DESCRIPTION
+        "Group of stats that we are implementing."
+    ::= { myConformenceGroups 1 }
+
+---
+--- vim modeline to tell it how to colorize
+--- vim: syntax=mib
+---
+END
