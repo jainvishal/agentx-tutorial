@@ -8,6 +8,12 @@
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 #include "agentxTutorial.h"
 
+/*
+ * Our data that we want to monitor over SNMP
+ */
+extern char myROStringVar[80];
+extern int myROIntegerVar;
+
 /** Initializes the agentxTutorial module */
 void
 init_agentxTutorial(void)
@@ -45,8 +51,8 @@ handle_myROString(netsnmp_mib_handler *handler,
 
         case MODE_GET:
             snmp_set_var_typed_value(requests->requestvb, ASN_OCTET_STR,
-                                     /* XXX: a pointer to the scalar's data */,
-                                     /* XXX: the length of the data in bytes */);
+                                     myROStringVar,
+                                     strlen(myROStringVar));
             break;
 
 
@@ -74,8 +80,8 @@ handle_myROInteger(netsnmp_mib_handler *handler,
 
         case MODE_GET:
             snmp_set_var_typed_value(requests->requestvb, ASN_INTEGER,
-                                     /* XXX: a pointer to the scalar's data */,
-                                     /* XXX: the length of the data in bytes */);
+                                     &myROIntegerVar,
+                                     sizeof(myROIntegerVar));
             break;
 
 

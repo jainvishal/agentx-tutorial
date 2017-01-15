@@ -25,11 +25,31 @@
 netsnmp_feature_require(agent_check_and_process)
 netsnmp_feature_require(enable_stderrlog)
 
+/*
+ * Our data that we want to monitor over SNMP.
+ * This is just a very crude example of showing how things work.
+ */
+char myROStringVar[80] = "";
+int myROIntegerVar = 0;
+
 static int keep_running;
 
 static RETSIGTYPE
 stop_server(int a) {
     keep_running = 0;
+}
+
+/*
+ * Our SIGALRM handler which will change our variables
+ */
+void AlrmHandler(int signo) {
+    /*
+     * lets increment this every time we get a GET request. This
+     * shows how value updates get reflected
+     * */
+    snprintf(myROStringVar, sizeof(myROStringVar)-1, "last changed = %ld", time(0));
+    myROIntegerVar++;
+    alarm(5);
 }
 
 static void usage(void) {
@@ -161,6 +181,10 @@ main (int argc, char **argv) {
   keep_running = 1;
   signal(SIGTERM, stop_server);
   signal(SIGINT, stop_server);
+
+  /** Setup our alarmhandler so we can see values change */
+  signal(SIGALRM, AlrmHandler);
+  AlrmHandler(0);
 
   /* you're main loop here... */
   while(keep_running) {

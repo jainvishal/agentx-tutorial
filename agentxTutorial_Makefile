@@ -22,20 +22,18 @@ USER_SRCS = \
 	$(TABLE_PREFIX)_data_set.c \
 	$(TABLE_PREFIX)_data_access.c
 
-SRCS = $(USER_SRCS) \
+SRCS =  \
 	$(TABLE_PREFIX).c \
-	$(TABLE_PREFIX)_subagent.c \
-	$(TABLE_PREFIX)_interface.c
+	$(TABLE_PREFIX)_subagent.c
 
 USER_OBJS =  \
 	$(TABLE_PREFIX)_data_get.o \
 	$(TABLE_PREFIX)_data_set.o \
 	$(TABLE_PREFIX)_data_access.o 
 
-OBJS =  $(USER_OBJS) \
+OBJS =  \
 	$(TABLE_PREFIX).o \
-	$(TABLE_PREFIX)_subagent.o \
-	$(TABLE_PREFIX)_interface.o
+	$(TABLE_PREFIX)_subagent.o
 
 TARGETS=$(TABLE_PREFIX)
 
@@ -54,4 +52,3 @@ $(TABLE_PREFIX): $(OBJS) $(TABLE_PREFIX)_Makefile
 
 clean:
 	rm -f $(OBJS) $(TARGETS)
-
