@@ -138,3 +138,39 @@ vishalj@dreams:~/workspace/agentx-tutorial/cmake-build-debug⟫
 ```
 ##### Checkin! (git tag: step1_scalars_implement)
 I checkin the code. Thats it for step 1.
+
+#### Step 2 - Simple Table using MIB FOR DUMMIES
+
+##### Add table to our MIB
+I created `myTestTable` as a simple table with two columns. So the new MIB structure looks like as below.
+```
+vishalj@dreams:~/workspace/agentx-tutorial⟫ snmptranslate -Tp -IR agentxTutorial
++--agentxTutorial(9999)
+   |
+   +--myScalars(1)
+   |  |
+   |  +-- -R-- String    myROString(1)
+   |  |        Textual Convention: DisplayString
+   |  |        Size: 0..255
+   |  +-- -R-- Integer32 myROInteger(2)
+   |           Range: 0..2147483647
+   |
+   +--myTables(2)
+   |  |
+   |  +--myTestTable(1)
+   |     |
+   |     +--myTestTableEntry(1)
+   |        |  Index: myROStringCol1
+   |        |
+   |        +-- -R-- String    myROStringCol1(1)
+   |        |        Textual Convention: DisplayString
+   |        |        Size: 0..255
+   |        +-- -R-- Integer32 myROIntCol2(2)
+   |                 Range: 0..2147483647
+   |
+   +--myConformenceGroups(99)
+      |
+      +--myScalarGroup(1)
+      +--myTableGroup(2)
+vishalj@dreams:~/workspace/agentx-tutorial⟫
+```

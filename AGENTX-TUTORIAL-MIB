@@ -27,6 +27,7 @@ agentxTutorial MODULE-IDENTITY
     ::= { experimental 9999 }
 
 myScalars           OBJECT IDENTIFIER ::= { agentxTutorial  1 }
+myTables            OBJECT IDENTIFIER ::= { agentxTutorial  2 }
 myConformenceGroups OBJECT IDENTIFIER ::= { agentxTutorial 99 }
 
 ---
@@ -47,6 +48,43 @@ myROInteger OBJECT-TYPE
     ::= { myScalars 2 }
 
 ---
+--- A test table
+---
+myTestTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF MyTestTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION "A test table with few columns and rows"
+    ::= { myTables 1 }
+
+myTestTableEntry OBJECT-TYPE
+    SYNTAX      MyTestTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION "A row of data in myTestTable"
+    INDEX       { myROStringCol1 }
+    ::= { myTestTable 1 }
+
+MyTestTableEntry ::= SEQUENCE {
+    myROStringCol1 DisplayString,
+    myROIntCol2    Integer32
+}
+
+myROStringCol1 OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Just a test label for table"
+    ::= { myTestTableEntry 1 }
+
+myROIntCol2 OBJECT-TYPE
+    SYNTAX      Integer32 (0..2147483647)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Just a test integer for table"
+    ::= { myTestTableEntry 2 }
+
+---
 --- Conformance related definitions
 ---
 
@@ -56,6 +94,13 @@ myScalarGroup OBJECT-GROUP
     DESCRIPTION
         "Group of stats that we are implementing."
     ::= { myConformenceGroups 1 }
+
+myTableGroup OBJECT-GROUP
+    OBJECTS { myROStringCol1, myROIntCol2 }
+    STATUS      current
+    DESCRIPTION
+        "Group of table stats that we are implementing."
+    ::= { myConformenceGroups 2 }
 
 ---
 --- vim modeline to tell it how to colorize
