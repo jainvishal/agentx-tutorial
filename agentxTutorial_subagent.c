@@ -10,6 +10,7 @@
 
 /* include our parent header */
 #include "agentxTutorial.h"
+#include "myTestTable.h"
 
 #include <signal.h>
 
@@ -168,7 +169,9 @@ main (int argc, char **argv) {
   init_agent("agentxTutorial");
 
   /* init agentxTutorial mib code */
-  init_agentxTutorial();  
+  init_agentxTutorial();
+    /* Initialize our test table */
+    init_myTestTable();
 
   /* read agentxTutorial.conf files. */
   init_snmp("agentxTutorial");

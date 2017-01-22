@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
-project(agentx-tutorial)
+project(agentxtutorial)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -16,6 +16,18 @@ set(LIBS ${NETSNMPLIBS})
 set(CFLAGS "-I. ${NETSNMPCFLAGS}")
 
 set(SOURCE_FILES
+        myTestTable.c
+        myTestTable.h
+        myTestTable_data_access.c
+        myTestTable_data_access.h
+        myTestTable_data_get.c
+        myTestTable_data_get.h
+        myTestTable_data_set.c
+        myTestTable_data_set.h
+        myTestTable_enums.h
+        myTestTable_interface.c
+        myTestTable_interface.h
+        myTestTable_oids.h
         agentxTutorial.c
         agentxTutorial.h
         agentxTutorial_subagent.c

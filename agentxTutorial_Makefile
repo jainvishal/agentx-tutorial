@@ -13,33 +13,24 @@ NETSNMPLIBS=`$(NETSNMPCONFIG) --agent-libs`
 
 LIBS=$(NETSNMPLIBS)
 
-
 STRICT_FLAGS = -Wall -Wstrict-prototypes
 CFLAGS=-I. $(NETSNMPCFLAGS) $(STRICT_FLAGS)
 
-USER_SRCS = \
-	$(TABLE_PREFIX)_data_get.c \
-	$(TABLE_PREFIX)_data_set.c \
-	$(TABLE_PREFIX)_data_access.c
-
-SRCS =  \
-	$(TABLE_PREFIX).c \
-	$(TABLE_PREFIX)_subagent.c
-
 USER_OBJS =  \
-	$(TABLE_PREFIX)_data_get.o \
-	$(TABLE_PREFIX)_data_set.o \
-	$(TABLE_PREFIX)_data_access.o 
+	myTestTable_data_get.o \
+	myTestTable_data_set.o \
+	myTestTable_data_access.o
 
-OBJS =  \
+OBJS =  $(USER_OBJS) \
 	$(TABLE_PREFIX).o \
-	$(TABLE_PREFIX)_subagent.o
+	$(TABLE_PREFIX)_subagent.o \
+	myTestTable.o \
+	myTestTable_interface.o
 
 TARGETS=$(TABLE_PREFIX)
 
 .SUFFIXES:
 .SUFFIXES: .c .o .deps
-
 
 all: $(TARGETS)
 

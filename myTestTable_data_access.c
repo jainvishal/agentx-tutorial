@@ -58,20 +58,17 @@ myTestTable_init_data(myTestTable_registration * myTestTable_reg)
      * TODO:303:o: Initialize myTestTable data.
      */
     /*
-    ***************************************************
-    ***             START EXAMPLE CODE              ***
-    ***---------------------------------------------***/
-    /*
-     * if you are the sole writer for the file, you could
-     * open it here. However, as stated earlier, we are assuming
-     * the worst case, which in this case means that the file is
-     * written to by someone else, and might not even exist when
-     * we start up. So we can't do anything here.
+     * Here we provide the list of columns that we are implementing
      */
-    /*
-    ***---------------------------------------------***
-    ***              END  EXAMPLE CODE              ***
-    ***************************************************/
+    static unsigned int my_columns[] = {
+            COLUMN_MYROSTRINGCOL1,
+            COLUMN_MYROINTCOL2
+    };
+    static netsnmp_column_info valid_columns;
+    valid_columns.isRange = 0;
+    valid_columns.details.list = my_columns;
+    valid_columns.list_count = sizeof(my_columns)/sizeof(unsigned int);
+    myTestTable_valid_columns_set(&valid_columns);
 
     return MFD_SUCCESS;
 } /* myTestTable_init_data */
@@ -206,18 +203,19 @@ myTestTable_container_load(netsnmp_container *container)
 {
     myTestTable_rowreq_ctx *rowreq_ctx;
     size_t                 count = 0;
+    int rc = MFD_SUCCESS;
 
     /*
      * temporary storage for index values
      */
-        /*
-         * myROStringCol1(1)/DisplayString/ASN_OCTET_STR/char(char)//L/A/w/e/R/d/H
-         */
-        /** 128 - 1(entry) - 1(col) - 0(other indexes) = 116 */
-   char   myROStringCol1[116];
-   size_t      myROStringCol1_len;
+    /*
+     * myROStringCol1(1)/DisplayString/ASN_OCTET_STR/char(char)//L/A/w/e/R/d/H
+     */
+    /** 128 - 1(entry) - 1(col) - 0(other indexes) = 116 */
+    char   myROStringCol1[116];
+    size_t myROStringCol1_len;
+    int myROIntCol2;
 
-    
     /*
      * this example code is based on a data source that is a
      * text file to be read and parsed.
@@ -228,92 +226,74 @@ myTestTable_container_load(netsnmp_container *container)
     DEBUGMSGTL(("verbose:myTestTable:myTestTable_container_load","called\n"));
 
     /*
-    ***************************************************
-    ***             START EXAMPLE CODE              ***
-    ***---------------------------------------------***/
-    /*
      * open our data file.
      */
-    filep = fopen("/etc/dummy.conf", "r");
+    filep = fopen("/var/tmp/dummy.conf", "r");
     if(NULL ==  filep) {
         return MFD_RESOURCE_UNAVAILABLE;
     }
 
     /*
-    ***---------------------------------------------***
-    ***              END  EXAMPLE CODE              ***
-    ***************************************************/
-    /*
-     * TODO:351:M: |-> Load/update data in the myTestTable container.
+     * |-> Load/update data in the myTestTable container.
      * loop over your myTestTable data, allocate a rowreq context,
      * set the index(es) [and data, optionally] and insert into
      * the container.
      */
     while( 1 ) {
-    /*
-    ***************************************************
-    ***             START EXAMPLE CODE              ***
-    ***---------------------------------------------***/
-    /*
-     * get a line (skip blank lines)
-     */
-    do {
-        if (!fgets(line, sizeof(line), filep)) {
-            /* we're done */
-            fclose(filep);
-            filep = NULL;
-        }
-    } while (filep && (line[0] == '\n'));
-
-    /*
-     * check for end of data
-     */
-    if(NULL == filep)
-        break;
-
-    /*
-     * parse line into variables
-     */
-    /*
-    ***---------------------------------------------***
-    ***              END  EXAMPLE CODE              ***
-    ***************************************************/
+        /*
+         * get a line (skip blank lines)
+         */
+        do {
+            if (!fgets(line, sizeof(line), filep)) {
+                /* we're done */
+                fclose(filep);
+                filep = NULL;
+            }
+        } while (filep && (line[0] == '\n'));
 
         /*
-         * TODO:352:M: |   |-> set indexes in new myTestTable rowreq context.
+         * check for end of data
+         */
+        if(NULL == filep)
+            break;
+
+        /*
+         * parse line into variables
+         */
+        sscanf(line, "%s%d", myROStringCol1, &myROIntCol2);
+        myROStringCol1_len = strlen(myROStringCol1);
+
+        /*
+         * set indexes in new myTestTable rowreq context.
          * data context will be set from the param (unless NULL,
          *      in which case a new data context will be allocated)
          */
         rowreq_ctx = myTestTable_allocate_rowreq_ctx(NULL);
         if (NULL == rowreq_ctx) {
             snmp_log(LOG_ERR, "memory allocation failed\n");
-            return MFD_RESOURCE_UNAVAILABLE;
+            rc = MFD_RESOURCE_UNAVAILABLE;
+            break;
         }
-        if(MFD_SUCCESS != myTestTable_indexes_set(rowreq_ctx
-                               , myROStringCol1, myROStringCol1_len
-               )) {
-            snmp_log(LOG_ERR,"error setting index while loading "
-                     "myTestTable data.\n");
+        if(MFD_SUCCESS != myTestTable_indexes_set(rowreq_ctx, myROStringCol1, myROStringCol1_len)) {
+            snmp_log(LOG_ERR,"error setting index while loading myTestTable data.\n");
             myTestTable_release_rowreq_ctx(rowreq_ctx);
             continue;
         }
 
         /*
-         * TODO:352:r: |   |-> populate myTestTable data context.
          * Populate data context here. (optionally, delay until row prep)
          */
-    /*
-     * TRANSIENT or semi-TRANSIENT data:
-     * copy data or save any info needed to do it in row_prep.
-     */
-    /*
-     * setup/save data for myROIntCol2
-     * myROIntCol2(2)/INTEGER32/ASN_INTEGER/long(long)//l/A/w/e/R/d/h
-     */
-    /** no mapping */
-    rowreq_ctx->data.myROIntCol2 = myROIntCol2;
-    
-        
+        /*
+         * TRANSIENT or semi-TRANSIENT data:
+         * copy data or save any info needed to do it in row_prep.
+         */
+        /*
+         * setup/save data for myROIntCol2
+         * myROIntCol2(2)/INTEGER32/ASN_INTEGER/long(long)//l/A/w/e/R/d/h
+         */
+        /** no mapping */
+        rowreq_ctx->data.myROIntCol2 = myROIntCol2;
+
         /*
          * insert into table container
          */
@@ -333,9 +313,9 @@ myTestTable_container_load(netsnmp_container *container)
     ***************************************************/
 
     DEBUGMSGT(("verbose:myTestTable:myTestTable_container_load",
-               "inserted %d records\n", count));
+            "inserted %ld records\n", count));
 
-    return MFD_SUCCESS;
+    return rc;
 } /* myTestTable_container_load */
 
 /**
