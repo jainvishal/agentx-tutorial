@@ -354,3 +354,54 @@ vishalj@dreams:~/workspace/agentx-tutorial⟫
 ```
 ##### Checkin! (git tag: step2_tables_implement)
 I checkin the code. Thats it for step 2.
+
+#### Step 3 - Implementing a simple Trap
+##### MIB
+Now we add a trap definition (`myROIntHit`) to our MIB. MIB structure is as below. In step 1 I introduced `myROInteger` 
+which is being incremented every 5 seconds in `AlrmHandler`. I will now introduce a logic that anytime `myROInteger`
+modulo 5 is equal to 1, a trap is generated. e.g. when `myROInteger` equals 6, 11, 16, 21 and so on.
+
+```
+vishalj@dreams:~/workspace/agentx-tutorial⟫ snmptranslate -Tp -IR agentxTutorial
++--agentxTutorial(9999)
+   |
+   +--myNotifications(0)
+   |  |
+   |  +--myNotificationObjects(0)
+   |  |  |
+   |  |  +-- ---N Integer32 myTrapTime(1)
+   |  |  +-- ---N String    myTrapData(2)
+   |  |           Textual Convention: DisplayString
+   |  |           Size: 0..255
+   |  |
+   |  +--myROIntHit(1)
+   |
+   +--myScalars(1)
+   |  |
+   |  +-- -R-- String    myROString(1)
+   |  |        Textual Convention: DisplayString
+   |  |        Size: 0..255
+   |  +-- -R-- Integer32 myROInteger(2)
+   |           Range: 0..2147483647
+   |
+   +--myTables(2)
+   |  |
+   |  +--myTestTable(1)
+   |     |
+   |     +--myTestTableEntry(1)
+   |        |  Index: myROStringCol1
+   |        |
+   |        +-- -R-- String    myROStringCol1(1)
+   |        |        Textual Convention: DisplayString
+   |        |        Size: 0..255
+   |        +-- -R-- Integer32 myROIntCol2(2)
+   |                 Range: 0..2147483647
+   |
+   +--myConformenceGroups(99)
+      |
+      +--myScalarGroup(1)
+      +--myTableGroup(2)
+      +--myTrapObjectGroup(3)
+      +--myTrapsGroup(4)
+vishalj@dreams:~/workspace/agentx-tutorial⟫
+```

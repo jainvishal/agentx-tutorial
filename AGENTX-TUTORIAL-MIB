@@ -1,11 +1,11 @@
 AGENTX-TUTORIAL-MIB DEFINITIONS ::= BEGIN
 
 IMPORTS
-    OBJECT-GROUP
+    NOTIFICATION-GROUP, OBJECT-GROUP
         FROM SNMPv2-CONF
     DisplayString
         FROM SNMPv2-TC
-    experimental, OBJECT-TYPE, Integer32, MODULE-IDENTITY
+    experimental, OBJECT-TYPE, NOTIFICATION-TYPE, Integer32, MODULE-IDENTITY
         FROM SNMPv2-SMI
 ;
 
@@ -26,9 +26,11 @@ agentxTutorial MODULE-IDENTITY
     DESCRIPTION  "First step with Read-Only Scalars"
     ::= { experimental 9999 }
 
-myScalars           OBJECT IDENTIFIER ::= { agentxTutorial  1 }
-myTables            OBJECT IDENTIFIER ::= { agentxTutorial  2 }
-myConformenceGroups OBJECT IDENTIFIER ::= { agentxTutorial 99 }
+myScalars              OBJECT IDENTIFIER ::= { agentxTutorial  1 }
+myTables               OBJECT IDENTIFIER ::= { agentxTutorial  2 }
+myNotifications        OBJECT IDENTIFIER ::= { agentxTutorial  0 }
+myNotificationObjects  OBJECT IDENTIFIER ::= { myNotifications 0 }
+myConformenceGroups    OBJECT IDENTIFIER ::= { agentxTutorial 99 }
 
 ---
 --- Some Scalars
@@ -85,6 +87,32 @@ myROIntCol2 OBJECT-TYPE
     ::= { myTestTableEntry 2 }
 
 ---
+--- Notifications/Traps
+---
+myTrapTime OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  accessible-for-notify
+    STATUS      current
+    DESCRIPTION "trap time stamp"
+    ::= { myNotificationObjects 1 }
+
+myTrapData OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  accessible-for-notify
+    STATUS      current
+    DESCRIPTION "trap data"
+    ::= { myNotificationObjects 2 }
+
+myROIntHit NOTIFICATION-TYPE
+    OBJECTS     { myTrapData, myTrapTime, myROInteger }
+    STATUS      current
+    DESCRIPTION
+        "Generated when ROInt variable reach certain following threshold
+             myROInteger % 5 = 1
+        "
+    ::= { myNotifications 1 }
+
+---
 --- Conformance related definitions
 ---
 
@@ -101,6 +129,20 @@ myTableGroup OBJECT-GROUP
     DESCRIPTION
         "Group of table stats that we are implementing."
     ::= { myConformenceGroups 2 }
+
+myTrapObjectGroup OBJECT-GROUP
+    OBJECTS { myTrapTime, myTrapData }
+    STATUS      current
+    DESCRIPTION
+        "Group of data points for sending Traps."
+    ::= { myConformenceGroups 3 }
+
+myTrapsGroup NOTIFICATION-GROUP
+    NOTIFICATIONS { myROIntHit }
+    STATUS      current
+    DESCRIPTION
+        "Notification indicating a specific change in interesting values."
+    ::= { myConformenceGroups 4 }
 
 ---
 --- vim modeline to tell it how to colorize
