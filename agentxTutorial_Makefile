@@ -14,19 +14,19 @@ NETSNMPLIBS=`$(NETSNMPCONFIG) --agent-libs`
 LIBS=$(NETSNMPLIBS)
 
 STRICT_FLAGS = -Wall -Wstrict-prototypes
-CFLAGS=-I. $(NETSNMPCFLAGS) $(STRICT_FLAGS)
+CFLAGS=-I. -I./include -I./include/myTestTable $(NETSNMPCFLAGS) $(STRICT_FLAGS)
 
 USER_OBJS =  \
-	myTestTable_data_get.o \
-	myTestTable_data_set.o \
-        agentxTutorial_traps.o \
-	myTestTable_data_access.o
+	src/myTestTable/myTestTable_data_get.o \
+	src/myTestTable/myTestTable_data_set.o \
+        src/agentxTutorial_traps.o \
+	src/myTestTable/myTestTable_data_access.o
 
 OBJS =  $(USER_OBJS) \
-	$(TABLE_PREFIX).o \
-	$(TABLE_PREFIX)_subagent.o \
-	myTestTable.o \
-	myTestTable_interface.o
+	src/$(TABLE_PREFIX).o \
+	src/$(TABLE_PREFIX)_subagent.o \
+	src/myTestTable/myTestTable.o \
+	src/myTestTable/myTestTable_interface.o
 
 TARGETS=$(TABLE_PREFIX)
 

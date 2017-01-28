@@ -456,3 +456,44 @@ root@dreams:~#
 ```
 ##### Checkin! (git tag: step3_traps_implement)
 I checkin the code. Thats it for step 3.
+
+### Cleanup
+So far I left all the code in root directory. Lets separate it out so that it is much more clear. Following is our new
+directory structure.
+```
+.
+├── agentxTutorial_Makefile
+├── AGENTX-TUTORIAL-MIB
+├── CMakeLists.txt
+├── include
+│   ├── agentxTutorial.h
+│   ├── agentxTutorial_traps.h
+│   └── myTestTable
+│       ├── myTestTable_data_access.h
+│       ├── myTestTable_data_get.h
+│       ├── myTestTable_data_set.h
+│       ├── myTestTable_enums.h
+│       ├── myTestTable.h
+│       ├── myTestTable_interface.h
+│       └── myTestTable_oids.h
+├── README.md
+└── src
+    ├── agentxTutorial.c
+    ├── agentxTutorial_subagent.c
+    ├── agentxTutorial_traps.c
+    ├── CMakeLists.txt
+    └── myTestTable
+        ├── myTestTable.c
+        ├── myTestTable_data_access.c
+        ├── myTestTable_data_get.c
+        ├── myTestTable_data_set.c
+        ├── myTestTable_interface.c
+        ├── myTestTable-README-FIRST.txt
+        └── myTestTable-README-myTestTable.txt
+```
+We have to update our `CMakeLists.txt` (or Makefile) file accordingly. I prefer `CMakeLists.txt` over the usual Makefile
+because `cmake` would put all temporary files in a different directory. That helps me keep my codebsae clean and tidy.
+
+### Conclusion
+So here is how we implemented a basic MIB with some scalars, a table and a trap using AgentX library provided by
+Net-SNMP. When I have more time I will provide an implementation of a real application in C++.
