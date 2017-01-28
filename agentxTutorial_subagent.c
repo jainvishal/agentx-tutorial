@@ -11,6 +11,7 @@
 /* include our parent header */
 #include "agentxTutorial.h"
 #include "myTestTable.h"
+#include "agentxTutorial_traps.h"
 
 #include <signal.h>
 
@@ -50,6 +51,7 @@ void AlrmHandler(int signo) {
      * */
     snprintf(myROStringVar, sizeof(myROStringVar)-1, "last changed = %ld", time(0));
     myROIntegerVar++;
+    if (myROIntegerVar % 5 == 1) send_myROIntHit_trap(myROIntegerVar);
     alarm(5);
 }
 

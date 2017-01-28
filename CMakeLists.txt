@@ -31,6 +31,8 @@ set(SOURCE_FILES
         agentxTutorial.c
         agentxTutorial.h
         agentxTutorial_subagent.c
+        agentxTutorial_traps.c
+        agentxTutorial_traps.h
         )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

@@ -6,6 +6,6 @@
 #define AGENTXTUTORIAL_TRAPS_H
 
 /* function declarations */
-int send_myROIntHit_trap(void);
+int send_myROIntHit_trap(int ValueForAlerting);
 
 #endif /* AGENTXTUTORIAL_TRAPS_H */
