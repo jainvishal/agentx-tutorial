@@ -19,6 +19,7 @@ CFLAGS=-I. $(NETSNMPCFLAGS) $(STRICT_FLAGS)
 USER_OBJS =  \
 	myTestTable_data_get.o \
 	myTestTable_data_set.o \
+        agentxTutorial_traps.o \
 	myTestTable_data_access.o
 
 OBJS =  $(USER_OBJS) \
