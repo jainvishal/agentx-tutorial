@@ -17,6 +17,7 @@ branch (.1.3.6.1.3) so my MIB branch is **.1.3.6.1.3.9999**.
 ### How to use this tutorial?
 There are multiple parts in this tutorial. As I described my approach of building it step by step, I strongly recommend
 to clone the code and start checking out the codes using tags that I have created. Here are the high level commands.
+
 1. Clone the repository.
    ```
    git clone https://github.com/jainvishal/agentx-tutorial
@@ -49,9 +50,9 @@ to clone the code and start checking out the codes using tags that I have create
        git checkout step3_traps_implement
        ```
 5. Final Cleaned up code
-```
-git checkout master
-```
+   ```
+   git checkout master
+   ```
 
 #### Step 1 - Simple MIB with two Read-Only Scalars
 ##### MIB
