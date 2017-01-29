@@ -48,6 +48,10 @@ to clone the code and start checking out the codes using tags that I have create
        ```
        git checkout step3_traps_implement
        ```
+5. Final Cleaned up code
+```
+git checkout master
+```
 
 #### Step 1 - Simple MIB with two Read-Only Scalars
 ##### MIB
